@@ -3,10 +3,12 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { appApi } from '../commons/api/appApi'
+import { authSlice } from '../features/auth/redux/authSlice'
 import { offlineQueueSlice } from '../features/tickets/redux/offlineQueueSlice'
 
 const rootReducer = combineReducers({
   [appApi.reducerPath]: appApi.reducer,
+  [authSlice.reducerPath]: authSlice.reducer,
   offlineQueue: offlineQueueSlice.reducer,
 })
 
