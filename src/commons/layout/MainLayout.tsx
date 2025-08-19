@@ -29,7 +29,7 @@ export function MainLayout({ children, banner }: AppLayoutProps) {
   const navItems = user?.role === UserRoles.Admin ? adminNavItems : operatorNavItems;
 
   return (
-    <div className={"min-h-dvh flex flex-col bg-gray-50" + (navItems.length ? ' pb-16' : '')}>
+    <div className={"min-h-dvh flex flex-col bg-gray-50" + (navItems.length > 1 ? ' pb-16' : '')}>
 
       {/* Header */}
       <header className="relative z-50 bg-white shadow-sm border-b border-gray-200">
