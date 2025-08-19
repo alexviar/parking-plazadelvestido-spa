@@ -51,6 +51,7 @@ export default function QRScanner({ onScan, isActive }: QRScannerProps) {
             }
           },
           {
+            maxScansPerSecond: 1,
             returnDetailedScanResult: true,
             // highlightScanRegion: true,
             // highlightCodeOutline: true
