@@ -1,4 +1,4 @@
-import { differenceInMinutes } from "date-fns"
+import { differenceInMinutes, format } from "date-fns"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { ConnectivityStatusBar } from "../../../commons/components/ConnectivityStatusBar"
@@ -8,6 +8,7 @@ import type { Tariff } from "../../tariffs/api/types"
 import type { Ticket } from "../api/types"
 import { parseQRCode } from "../parseQrCode"
 import { addItem } from "../redux/offlineQueueSlice"
+import { useOfflineQueueProcessor } from "../useOfflineQueueProcessor"
 import ScanResult from "./ScanResult"
 
 export const TicketScanner = () => {
@@ -17,6 +18,8 @@ export const TicketScanner = () => {
 
   const tariffs = useSelector((state: any) => state.tariffs) as Tariff[]
 
+  useOfflineQueueProcessor()
+
   const handleScan = async (qrCode: string) => {
     const exitTime = new Date()
     const parsedQr = parseQRCode(qrCode)
@@ -24,22 +27,17 @@ export const TicketScanner = () => {
     let ticket: Ticket | null = null
     if (parsedQr.isValid) {
       const duration = differenceInMinutes(exitTime, parsedQr.entryTime)
-      const tariff = [...tariffs!].sort((a, b) => b.threshold - a.threshold).find(tariff => duration >= tariff.threshold)
-      console.log(tariff)
+      const tariff = [...tariffs!].sort((a, b) => b.threshold - a.threshold).find(tariff => duration >= tariff.threshold)!
+
       ticket = {
         id: 0,
         code: qrCode,
         folio: parsedQr.folio,
-        entryTime: parsedQr.entryTime,
-        exitTime: exitTime,
+        entryTime: format(parsedQr.entryTime, 'yyyy-MM-dd HH:mm:ss'),
+        exitTime: format(exitTime, 'yyyy-MM-dd HH:mm:ss'),
         duration,
-        amount: tariff?.amount || 0,
-        tariff: tariff || {
-          id: 0,
-          threshold: 0,
-          amount: 0,
-          name: 'No aplicable'
-        }
+        amount: tariff.amount,
+        tariff: tariff
       }
       setCurrentTicket(ticket)
     }
@@ -55,7 +53,7 @@ export const TicketScanner = () => {
     }
   }
 
-  if (!tariffs) return null
+  if (tariffs.length === 0) return null
 
   return (
     <MainLayout

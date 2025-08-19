@@ -2,10 +2,10 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { Ticket } from '../api/types';
 
-type OfflineItem = {
+export type OfflineItem = {
   id: string
   data: Ticket
-  status: 'pending' | 'syncing' | 'error'
+  status: 'pending' | 'syncing' | 'synced' | 'failed'
 }
 
 type OfflineQueueState = OfflineItem[]

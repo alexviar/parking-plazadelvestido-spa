@@ -3,8 +3,8 @@ import type { Tariff } from "../../tariffs/api/types"
 export interface Ticket {
   id: number
   code: string
-  entryTime: Date
-  exitTime: Date
+  entryTime: string
+  exitTime: string
   duration: number
   amount: number
   folio: string
