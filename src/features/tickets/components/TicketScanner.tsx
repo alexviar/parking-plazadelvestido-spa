@@ -67,7 +67,7 @@ export const TicketScanner = () => {
 
         {/* Scan Result */}
         {(currentTicket || currentError) && (
-          <div className="rounded-t-2xl overflow-hidden -mt-4 z-10 animate-scale-up">
+          <div key={currentTicket?.code || 'error'} className="rounded-t-2xl overflow-hidden -mt-4 z-10 animate-slide-in-up">
             <ScanResult
               data={currentTicket}
               error={currentError}

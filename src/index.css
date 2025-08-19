@@ -13,4 +13,18 @@
       transform: scale(1.01);
     }
   }
+
+  --animate-slide-in-up: slideInUp 0.3s ease-out;
+
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }
