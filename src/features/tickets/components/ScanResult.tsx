@@ -37,7 +37,7 @@ export default function ScanResult({ data, error }: ScanResultProps) {
                 <LuClock className="text-[1.25em] text-gray-500 mr-2" />
                 <span className="text-gray-600">Tiempo</span>
               </div>
-              <span className="font-semibold text-gray-900">{data.duration} h</span>
+              <span className="font-semibold text-gray-900">{data.duration} min</span>
             </div>
 
           </div>

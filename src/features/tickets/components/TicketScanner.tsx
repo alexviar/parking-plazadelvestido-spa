@@ -1,10 +1,10 @@
-import { differenceInHours } from "date-fns"
+import { differenceInMinutes } from "date-fns"
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ConnectivityStatusBar } from "../../../commons/components/ConnectivityStatusBar"
 import QRScanner from "../../../commons/components/QRScanner"
 import { MainLayout } from "../../../commons/layout/MainLayout"
-import { getApplicableTariff } from "../../tariffs/utils/getApplicableTariff"
+import type { Tariff } from "../../tariffs/api/types"
 import type { Ticket } from "../api/types"
 import { parseQRCode } from "../parseQrCode"
 import { addItem } from "../redux/offlineQueueSlice"
@@ -15,14 +15,17 @@ export const TicketScanner = () => {
   const [currentError, setCurrentError] = useState<string | undefined>()
   const dispatch = useDispatch()
 
+  const tariffs = useSelector((state: any) => state.tariffs) as Tariff[]
+
   const handleScan = async (qrCode: string) => {
     const exitTime = new Date()
     const parsedQr = parseQRCode(qrCode)
 
     let ticket: Ticket | null = null
     if (parsedQr.isValid) {
-      const duration = differenceInHours(exitTime, parsedQr.entryTime)
-      const tariff = getApplicableTariff(duration)!
+      const duration = differenceInMinutes(exitTime, parsedQr.entryTime)
+      const tariff = [...tariffs!].sort((a, b) => b.threshold - a.threshold).find(tariff => duration >= tariff.threshold)
+      console.log(tariff)
       ticket = {
         id: 0,
         code: qrCode,
@@ -30,8 +33,13 @@ export const TicketScanner = () => {
         entryTime: parsedQr.entryTime,
         exitTime: exitTime,
         duration,
-        amount: tariff.amount,
-        tariff
+        amount: tariff?.amount || 0,
+        tariff: tariff || {
+          id: 0,
+          threshold: 0,
+          amount: 0,
+          name: 'No aplicable'
+        }
       }
       setCurrentTicket(ticket)
     }
@@ -46,6 +54,8 @@ export const TicketScanner = () => {
       }))
     }
   }
+
+  if (!tariffs) return null
 
   return (
     <MainLayout

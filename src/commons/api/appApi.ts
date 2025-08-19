@@ -63,11 +63,6 @@ export const appApi = createApi({
   refetchOnMountOrArgChange: true,
   extractRehydrationInfo(action, { reducerPath }): any {
     if (isHydrateAction(action)) {
-      // when persisting the api reducer
-      if (action.key === 'key used with redux-persist') {
-        return action.payload
-      }
-
       // When persisting the root reducer
       return action.payload?.[reducerPath]
     }

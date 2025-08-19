@@ -1,6 +1,6 @@
+import type { Control, FieldPath, FieldValues } from "react-hook-form";
 import { useFormState } from "react-hook-form";
 import { LuCircleAlert } from "react-icons/lu";
-import { Control, FieldValues, FieldPath } from "react-hook-form";
 
 type ErrorMessageProps<T extends FieldValues> = {
   name: FieldPath<T>;

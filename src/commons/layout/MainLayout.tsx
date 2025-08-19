@@ -1,27 +1,32 @@
 import { type ReactNode } from 'react';
-import { LuLogOut, LuQrCode } from 'react-icons/lu';
+import { LuChartBar, LuHouse, LuLogOut, LuQrCode, LuSettings } from 'react-icons/lu';
 import { NavLink } from 'react-router';
 import logo from '../../assets/logo.jpg';
+import { useLogoutMutation } from '../../features/auth/api/authApi';
+import { UserRoles } from '../../features/auth/api/types';
+import { useUser } from '../../features/auth/hooks/useUser';
 
 interface AppLayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
   banner?: ReactNode;
 }
 
 export function MainLayout({ children, banner }: AppLayoutProps) {
 
+  const [logout] = useLogoutMutation()
+
   const operatorNavItems = [
     { name: 'Escanear', path: '/scanner', icon: LuQrCode },
   ];
 
-  // const adminNavItems = [
-  //   { name: 'Dashboard', path: '/dashboard', icon: LuHouse },
-  //   { name: 'Tarifas', path: '/tariffs', icon: LuSettings },
-  //   { name: 'Historial', path: '/history', icon: LuChartBar },
-  // ];
+  const adminNavItems = [
+    { name: 'Dashboard', path: '/', icon: LuHouse },
+    { name: 'Tarifas', path: '/tariffs', icon: LuSettings },
+    { name: 'Historial', path: '/history', icon: LuChartBar },
+  ];
 
-  // const navItems = user?.role === 'admin' ? adminNavItems : operatorNavItems;
-  const navItems = operatorNavItems
+  const user = useUser()
+  const navItems = user?.role === UserRoles.Admin ? adminNavItems : operatorNavItems;
 
   return (
     <div className="min-h-dvh flex flex-col bg-gray-50">
@@ -40,12 +45,20 @@ export function MainLayout({ children, banner }: AppLayoutProps) {
               <p className="text-xs text-gray-500">Usuario</p>
             </div>
           </div>
-          <button
-            // onClick={logout}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <LuLogOut className="h-5 w-5 text-gray-600" />
-          </button>
+          <div className='flex items-center gap-2'>
+            {/* {user?.role === UserRoles.Admin && <Link
+              to="/tickets/scanner"
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <LuScanQrCode className="h-5 w-5 text-gray-600" />
+            </Link>} */}
+            <button
+              onClick={() => logout()}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <LuLogOut className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
         </div>
       </header>
 
