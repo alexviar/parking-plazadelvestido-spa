@@ -1,5 +1,5 @@
 import { differenceInMinutes, format } from "date-fns"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { ConnectivityStatusBar } from "../../../commons/components/ConnectivityStatusBar"
 import QRScanner from "../../../commons/components/QRScanner"
@@ -7,7 +7,7 @@ import { MainLayout } from "../../../commons/layout/MainLayout"
 import type { Tariff } from "../../tariffs/api/types"
 import type { Ticket } from "../api/types"
 import { parseQRCode } from "../parseQrCode"
-import { addItem } from "../redux/offlineQueueSlice"
+import { addItem, type OfflineItem } from "../redux/offlineQueueSlice"
 import { useOfflineQueueProcessor } from "../useOfflineQueueProcessor"
 import ScanResult from "./ScanResult"
 
@@ -17,12 +17,25 @@ export const TicketScanner = () => {
   const dispatch = useDispatch()
 
   const tariffs = useSelector((state: any) => state.tariffs) as Tariff[]
+  const offlineQueue = useSelector((state: any) => state.offlineQueue) as OfflineItem[]
+  const offlineQueueRef = useRef(offlineQueue)
+  offlineQueueRef.current = offlineQueue
 
   useOfflineQueueProcessor()
 
+  const scannedQrCodeRef = useRef('')
   const handleScan = async (qrCode: string) => {
+    scannedQrCodeRef.current = qrCode
     const exitTime = new Date()
     const parsedQr = parseQRCode(qrCode)
+
+    // Check for duplicate in offline queue
+    const isDuplicate = offlineQueueRef.current.some(item => item.data.code === qrCode)
+    if (isDuplicate) {
+      setCurrentError(`El ticket ${qrCode} ya ha sido escaneado.`)
+      setCurrentTicket(undefined)
+      return
+    }
 
     let ticket: Ticket | null = null
     if (parsedQr.isValid) {
@@ -40,9 +53,11 @@ export const TicketScanner = () => {
         tariff: tariff
       }
       setCurrentTicket(ticket)
+      setCurrentError(undefined)
     }
     else {
       setCurrentError(parsedQr.error)
+      setCurrentTicket(undefined)
     }
 
     if (ticket) {
@@ -67,7 +82,7 @@ export const TicketScanner = () => {
 
         {/* Scan Result */}
         {(currentTicket || currentError) && (
-          <div key={currentTicket?.code || 'error'} className="rounded-t-2xl overflow-hidden -mt-4 z-10 animate-slide-in-up">
+          <div key={scannedQrCodeRef.current} className="rounded-t-2xl overflow-hidden -mt-4 z-10 animate-slide-in-up">
             <ScanResult
               data={currentTicket}
               error={currentError}
