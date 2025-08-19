@@ -13,18 +13,31 @@ export default function QRScanner({ onScan, isActive }: QRScannerProps) {
   const [hasCamera, setHasCamera] = useState<boolean>()
   const [error, setError] = useState<string>('')
 
+  const audioContextRef = useRef<AudioContext | null>(null);
+
   useEffect(() => {
     const videoElement = videoRef.current
     if (!videoElement) return
 
-    const playBeep = () => {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-      const oscillator = audioContext.createOscillator()
-      oscillator.type = 'sine'
-      oscillator.frequency.setValueAtTime(1000, audioContext.currentTime)
-      oscillator.connect(audioContext.destination)
-      oscillator.start()
-      oscillator.stop(audioContext.currentTime + 0.1)
+    const playBeep = async () => {
+      try {
+        if (!audioContextRef.current) {
+          audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        }
+
+        if (audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+        }
+
+        const oscillator = audioContextRef.current.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(1000, audioContextRef.current.currentTime);
+        oscillator.connect(audioContextRef.current.destination);
+        oscillator.start();
+        oscillator.stop(audioContextRef.current.currentTime + 0.1);
+      } catch (err) {
+        console.error('Error playing beep:', err);
+      }
     }
 
     let cancelled = false
@@ -74,6 +87,9 @@ export default function QRScanner({ onScan, isActive }: QRScannerProps) {
       if (qrScannerRef.current) {
         qrScannerRef.current.stop()
         qrScannerRef.current.destroy()
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close();
       }
     }
   }, [])
