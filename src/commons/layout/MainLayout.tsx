@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { LuChartBar, LuHouse, LuLogOut, LuQrCode, LuSettings } from 'react-icons/lu';
+import { LuHouse, LuLogOut, LuQrCode, LuSettings, LuSquareParking } from 'react-icons/lu';
 import { NavLink } from 'react-router';
 import logo from '../../assets/logo.jpg';
 import { useLogoutMutation } from '../../features/auth/api/authApi';
@@ -22,14 +22,14 @@ export function MainLayout({ children, banner }: AppLayoutProps) {
   const adminNavItems = [
     { name: 'Dashboard', path: '/', icon: LuHouse },
     { name: 'Tarifas', path: '/tariffs', icon: LuSettings },
-    { name: 'Historial', path: '/history', icon: LuChartBar },
+    { name: 'Historial', path: '/tickets', icon: LuSquareParking },
   ];
 
   const user = useUser()
   const navItems = user?.role === UserRoles.Admin ? adminNavItems : operatorNavItems;
 
   return (
-    <div className="min-h-dvh flex flex-col bg-gray-50">
+    <div className={"min-h-dvh flex flex-col bg-gray-50" + (navItems.length ? ' pb-16' : '')}>
 
       {/* Header */}
       <header className="relative z-50 bg-white shadow-sm border-b border-gray-200">

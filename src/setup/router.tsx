@@ -8,6 +8,7 @@ import { useUser } from "../features/auth/hooks/useUser";
 import { tariffsApi } from "../features/tariffs/api/tariffsApi";
 import { TariffFormPage } from "../features/tariffs/components/TariffFormPage";
 import { TariffIndexPage } from "../features/tariffs/components/TariffIndexPage";
+import { TicketIndexPage } from "../features/tickets/components/TicketIndexPage";
 import { TicketScanner } from "../features/tickets/components/TicketScanner";
 
 const Home = () => {
@@ -53,6 +54,15 @@ export const router = createBrowserRouter([
           {
             path: ':tariffId/edit',
             element: <TariffFormPage key="edit" />
+          }
+        ]
+      },
+      {
+        path: '/tickets',
+        children: [
+          {
+            index: true,
+            element: <TicketIndexPage />
           }
         ]
       }
