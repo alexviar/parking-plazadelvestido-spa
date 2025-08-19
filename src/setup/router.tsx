@@ -5,6 +5,7 @@ import { UserRoles } from "../features/auth/api/types";
 import { LoginPage } from "../features/auth/components/LoginPage";
 import { PrivateRoute } from "../features/auth/components/PrivateRoute";
 import { useUser } from "../features/auth/hooks/useUser";
+import Dashboard from "../features/dashboard/components/Dashboard";
 import { tariffsApi } from "../features/tariffs/api/tariffsApi";
 import { TariffFormPage } from "../features/tariffs/components/TariffFormPage";
 import { TariffIndexPage } from "../features/tariffs/components/TariffIndexPage";
@@ -20,7 +21,7 @@ const Home = () => {
   }, [])
 
 
-  return user?.role === UserRoles.Admin ? <MainLayout></MainLayout> : <TicketScanner />
+  return user?.role === UserRoles.Admin ? <Dashboard /> : <TicketScanner />
 
 }
 
