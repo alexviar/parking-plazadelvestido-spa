@@ -12,18 +12,4 @@ const dashboardApi = appApi.injectEndpoints({
   })
 })
 
-export interface ActivityLogEntry {
-  id: number;
-  description: string;
-  causer: {
-    id: number;
-    name: string;
-    email: string;
-  } | null;
-  subjectType: string;
-  subjectId: number;
-  properties: any;
-  createdAt: string;
-}
-
 export const { useGetDailyStatsQuery } = dashboardApi

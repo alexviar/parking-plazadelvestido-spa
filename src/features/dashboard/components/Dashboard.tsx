@@ -58,6 +58,19 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* Gaps Section */}
+            {getDailyStats.data.gaps && getDailyStats.data.gaps.length > 0 && (
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900">Intervalos perdidos</h3>
+                <ul className="list-disc list-inside">
+                  {getDailyStats.data.gaps.map((gap, index) => (
+                    <li key={index} className="text-gray-700">
+                      De folio {gap.from} a {gap.to}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {/* Quick Actions */}
             {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Acciones rápidas</h3>
