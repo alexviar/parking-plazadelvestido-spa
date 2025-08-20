@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { useState } from "react";
 import { LuCalendar, LuDollarSign, LuSquareParking } from "react-icons/lu";
@@ -6,8 +6,8 @@ import { MainLayout } from "../../../commons/layout/MainLayout";
 import { useGetDailyStatsQuery } from "../api/dashboardApi";
 
 export default function Dashboard() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const getDailyStats = useGetDailyStatsQuery({ date: format(selectedDate, 'yyyy-MM-dd') })
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const getDailyStats = useGetDailyStatsQuery({ date: selectedDate })
 
   return (
     <MainLayout>
@@ -18,8 +18,8 @@ export default function Dashboard() {
           <div className="relative">
             <input
               type="date"
-              value={format(selectedDate, 'yyyy-MM-dd')}
-              onChange={(e) => setSelectedDate(new Date(e.target.value))}
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value || format(new Date(), 'yyyy-MM-dd'))}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
             <LuCalendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
@@ -29,7 +29,7 @@ export default function Dashboard() {
         {/* Date Display */}
         <div className="text-center">
           <p className="text-lg font-medium text-gray-900">
-            {format(selectedDate, "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })}
+            {format(selectedDate ? parse(selectedDate, 'yyyy-MM-dd', new Date()) : new Date(), "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })}
           </p>
         </div>
 
