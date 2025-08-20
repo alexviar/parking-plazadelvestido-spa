@@ -37,28 +37,24 @@ export default function Dashboard() {
           <>
             {/* Stats Cards */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <div className="flex items-center">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-2">
+                <div className="flex items-center gap-2">
                   <div className="p-2 bg-blue-100 rounded-lg">
-                    <LuSquareParking className="h-6 w-6 text-blue-600" />
+                    <LuSquareParking className="h-5 w-5 text-blue-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Boletos</p>
-                    <p className="text-2xl font-bold text-gray-900">{getDailyStats.data.totalTickets}</p>
-                  </div>
+                  <p className="text-sm text-gray-600">Boletos</p>
                 </div>
+                <p className="text-2xl font-bold text-gray-900">{getDailyStats.data.totalTickets}</p>
               </div>
 
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <div className="flex items-center">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-2">
+                <div className="flex items-center gap-2">
                   <div className="p-2 bg-green-100 rounded-lg">
-                    <LuDollarSign className="h-6 w-6 text-green-600" />
+                    <LuDollarSign className="h-5 w-5 text-green-600" />
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm text-gray-600">Ingresos</p>
-                    <p className="text-2xl font-bold text-green-600">${getDailyStats.data.totalAmount}</p>
-                  </div>
+                  <p className="text-sm text-gray-600">Ingresos</p>
                 </div>
+                <p className="text-2xl font-bold text-green-600">${Number(getDailyStats.data.totalAmount).toFixed(0)}</p>
               </div>
             </div>
 
