@@ -3,5 +3,5 @@ export interface Stats {
   totalTickets: number
   totalAmount: number
 
-  gaps: { from: number, to: number }[]
+  gaps: number[]
 }

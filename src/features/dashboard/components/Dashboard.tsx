@@ -61,11 +61,11 @@ export default function Dashboard() {
             {/* Gaps Section */}
             {getDailyStats.data.gaps && getDailyStats.data.gaps.length > 0 && (
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">Intervalos perdidos</h3>
-                <ul className="list-disc list-inside">
+                <h3 className="text-lg font-semibold text-gray-900">Folios faltantes</h3>
+                <ul className="list-disc list-inside grid grid-cols-2 gap-x-4">
                   {getDailyStats.data.gaps.map((gap, index) => (
                     <li key={index} className="text-gray-700">
-                      De folio {gap.from} a {gap.to}
+                      {gap}
                     </li>
                   ))}
                 </ul>
