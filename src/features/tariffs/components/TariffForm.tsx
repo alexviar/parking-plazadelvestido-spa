@@ -9,7 +9,7 @@ import type { Tariff } from "../api/types"
 
 const schema = yup.object({
   name: yup.string().required('El nombre es obligatorio'),
-  amount: yup.number().min(1, 'Debe ser mayor o igual a 1').required('El monto es obligatorio'),
+  amount: yup.number().min(0, 'Debe ser mayor o igual a 0').required('El monto es obligatorio'),
   threshold: yup.number().integer().min(0, 'Debe ser mayor o igual a 0').required('El umbral es obligatorio'),
 })
 
