@@ -1,4 +1,4 @@
-import { LuCircleCheck, LuCircleX, LuClock, LuQrCode } from 'react-icons/lu'
+import { LuCircleAlert, LuCircleCheck, LuCircleX, LuClock, LuQrCode } from 'react-icons/lu'
 import type { Ticket } from '../api/types'
 
 type ScanResultProps = {
@@ -12,8 +12,10 @@ export default function ScanResult({ data, error }: ScanResultProps) {
       {error ? (
         // Error State
         <div className="text-center">
-          <LuCircleX className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Error</h3>
+          {!error.endsWith('ya ha sido escaneado.')
+            ? <LuCircleX className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            : <LuCircleAlert className="h-16 w-16 text-yellow-500 mx-auto mb-4" />}
+          {!error.endsWith('ya ha sido escaneado.') && <h3 className="text-lg font-semibold text-gray-900 mb-2">Error</h3>}
           <p className="text-gray-600 mb-4">{error}</p>
         </div>
       ) : data && (
