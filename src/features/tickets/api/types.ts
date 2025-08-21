@@ -9,5 +9,5 @@ export interface Ticket {
   amount: number
   folio: string
 
-  tariff: Tariff
+  tariff?: Tariff
 }

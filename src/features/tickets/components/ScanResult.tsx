@@ -19,10 +19,18 @@ export default function ScanResult({ data, error }: ScanResultProps) {
       ) : data && (
         // Success State
         <div className="space-y-3">
-          <div className="text-center">
-            <LuCircleCheck className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900">¡Boleto procesado!</h3>
-          </div>
+          {data.tariff ? (
+            <div className="text-center">
+              <LuCircleCheck className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900">¡Boleto procesado!</h3>
+            </div>
+          ) : (
+            <div className="text-center">
+              <LuCircleX className="h-16 w-16 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Error</h3>
+              <p className="text-gray-600 mb-4">No pudimos encontrar una tarifa que sea aplicable a esta duración</p>
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center justify-between gap-4 p-3 bg-gray-50 rounded-lg text-sm">
               <div className="flex items-center">
@@ -46,8 +54,7 @@ export default function ScanResult({ data, error }: ScanResultProps) {
             <div className="w-full flex items-center justify-end p-3 bg-green-50 rounded-lg border border-green-200">
               <span className="font-bold text-green-700 text-6xl">${data.amount.toFixed(0)}</span>
             </div>
-            <span className="mt-1 text-xs text-gray-500">Tarifa aplicada: {data.tariff.name}</span>
-
+            {data.tariff && <span className="mt-1 text-xs text-gray-500">Tarifa aplicada: {data.tariff.name}</span>}
           </div>
         </div>
       )}

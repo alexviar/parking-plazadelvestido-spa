@@ -40,7 +40,7 @@ export const TicketScanner = () => {
     let ticket: Ticket | null = null
     if (parsedQr.isValid) {
       const duration = differenceInMinutes(exitTime, parsedQr.entryTime)
-      const tariff = [...tariffs!].sort((a, b) => b.threshold - a.threshold).find(tariff => duration >= tariff.threshold)!
+      const tariff = [...tariffs!].sort((a, b) => b.threshold - a.threshold).find(tariff => duration >= tariff.threshold)
 
       ticket = {
         id: 0,
@@ -49,7 +49,7 @@ export const TicketScanner = () => {
         entryTime: format(parsedQr.entryTime, 'yyyy-MM-dd HH:mm:ss'),
         exitTime: format(exitTime, 'yyyy-MM-dd HH:mm:ss'),
         duration,
-        amount: tariff.amount,
+        amount: tariff?.amount ?? NaN,
         tariff: tariff
       }
       setCurrentTicket(ticket)
