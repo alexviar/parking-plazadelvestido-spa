@@ -115,7 +115,7 @@ export default function QRScanner({ onScan, isActive }: QRScannerProps) {
         />
       </div>
 
-      {hasCamera === false ? (
+      {hasCamera === undefined ? (
         <div className="text-center text-white p-6">
           <LuQrCode className="h-12 w-12 mx-auto mb-3 text-gray-400" />
           <p className="text-sm">Verificando cámara...</p>
