@@ -25,8 +25,8 @@ jobs:
 
       - name: Build project
         env:
-          VITE_APP_NAME: ${{ secrets.APP_NAME }}
-          VITE_API_URL: ${{ github.ref == 'refs/heads/main' && secrets.API_URL || secrets.DEV_API_URL }}
+          VITE_APP_NAME: ${{ vars.APP_NAME }}
+          VITE_API_URL: ${{ github.ref == 'refs/heads/main' && vars.API_URL || vars.DEV_API_URL }}
         run: npm run build
 
       - name: Upload to FTP (or SFTP)
