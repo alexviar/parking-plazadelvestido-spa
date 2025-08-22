@@ -1,0 +1,36 @@
+# Configura el índice por defecto
+DirectoryIndex index.html
+
+# Habilita el motor de reescritura
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Redirige rutas no existentes a index.html
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+# Configuración de caché para assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 0 seconds"
+    
+    <If "%{REQUEST_URI} =~ m#^/assets/#">
+        ExpiresDefault "access plus 1 year"
+    </If>
+</IfModule>
+
+# Headers de control de caché
+<IfModule mod_headers.c>
+    # Configuración por defecto (sin caché)
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    
+    # Sobrescribe para assets
+    <If "%{REQUEST_URI} =~ m#^/assets/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+        Header unset Pragma
+    </If>
+</IfModule>
