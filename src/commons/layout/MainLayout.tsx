@@ -16,7 +16,8 @@ export function MainLayout({ children, banner }: AppLayoutProps) {
   const [logout] = useLogoutMutation()
 
   const operatorNavItems = [
-    { name: 'Escanear', path: '/scanner', icon: LuQrCode },
+    { name: 'Escanear', path: '/', icon: LuQrCode },
+    { name: 'Tarifas', path: '/tariffs', icon: LuSettings },
   ];
 
   const adminNavItems = [
