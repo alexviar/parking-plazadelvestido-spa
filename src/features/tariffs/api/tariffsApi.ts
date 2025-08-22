@@ -105,6 +105,7 @@ export const tariffsApi = appApi
 
 export const {
   useGetTariffsQuery,
+  useLazyGetTariffsQuery,
   useGetTariffQuery,
   useCreateTariffMutation,
   useUpdateTariffMutation,

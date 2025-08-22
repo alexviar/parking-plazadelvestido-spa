@@ -6,16 +6,13 @@ import { getErrorMessage } from '../../../commons/api/utils/getErrorMessage'
 import { Alert } from '../../../commons/components/Alert'
 import { MainLayout } from '../../../commons/layout/MainLayout'
 import { useUser } from '../../auth/hooks/useUser'
-import { useDeleteTariffMutation, useGetTariffsQuery } from '../api/tariffsApi'
+import { useDeleteTariffMutation, useLazyGetTariffsQuery } from '../api/tariffsApi'
 import type { Tariff } from '../api/types'
 
 export const TariffIndexPage = () => {
   const user = useUser()
 
-  const getTariffs = useGetTariffsQuery({
-    page: 1,
-    pageSize: 50
-  })
+  const [getTariffs, getTariffsResult] = useLazyGetTariffsQuery()
   const tariffs = useSelector((state: any) => state.tariffs) as Tariff[]
 
   const [deleteTariff] = useDeleteTariffMutation()
@@ -28,11 +25,14 @@ export const TariffIndexPage = () => {
           <div className="flex items-center gap-2">
             {user?.role == 2 && <button
               onClick={() => {
-                getTariffs.refetch()
+                getTariffs({
+                  page: 1,
+                  pageSize: 50
+                })
               }}
               className="flex items-center justify-center gap-2 bg-blue-600 text-white p-2 rounded-md"
             >
-              <LuRefreshCw className={twMerge("w-6 h-6", tariffs && getTariffs.isFetching && "animate-spin [animation-duration:2s]")} /> Sincronizar
+              <LuRefreshCw className={twMerge("w-6 h-6", tariffs && getTariffsResult.isFetching && "animate-spin [animation-duration:2s]")} /> Sincronizar
             </button>}
             {user?.role == 1 && (
               <Link to="/tariffs/new" className="bg-blue-600 text-white px-4 py-2 rounded-md">
@@ -42,8 +42,8 @@ export const TariffIndexPage = () => {
           </div>
         </div>
 
-        {getTariffs.isError && (
-          <Alert type='error' message={getErrorMessage(getTariffs.error)} />
+        {getTariffsResult.isError && (
+          <Alert type='error' message={getErrorMessage(getTariffsResult.error)} />
         )}
 
         {tariffs ?
@@ -88,7 +88,7 @@ export const TariffIndexPage = () => {
                 </div>
               ))}
             </div>
-          ) : getTariffs.isFetching ? (
+          ) : getTariffsResult.isFetching ? (
             <div className='flex flex-col gap-4'>
               {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 animate-pulse">
